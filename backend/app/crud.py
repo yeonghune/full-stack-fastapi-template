@@ -38,9 +38,13 @@ def get_user_by_email(*, session: Session, email: str) -> User | None:
 
 
 def authenticate(*, session: Session, email: str, password: str) -> User | None:
+    # DB로 부터 email 을 이용해서 db_use를 가져옴
     db_user = get_user_by_email(session=session, email=email)
+    # 존재하지 않는 이메일일 경우
     if not db_user:
         return None
+    # 비밀번호 검증
+    # password 와 DB에 있는 hashed_password랑 비교
     if not verify_password(password, db_user.hashed_password):
         return None
     return db_user
